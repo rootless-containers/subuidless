@@ -3,7 +3,8 @@
 `subuidless` is an implementaion of OCI Seccomp Receiver for running Rootless Containers without `/etc/subuid` and `/etc/subgid`.
 
 `subuidlesss` emulates ID-related system calls using Seccomp User Notification and XAttrs.
-Unlike ptrace implementatins of similar projects such as [runROOTLESS (PRoot)](https://github.com/rootless-containers/runrootless) and [remainroot](https://github.com/cyphar/remainroot), `subuidless` can minimize the overhead of system call hooking.
+
+Unlike similar projects such as [runROOTLESS (PRoot)](https://github.com/rootless-containers/runrootless) and [remainroot](https://github.com/cyphar/remainroot), `subuidless` can minimize the overhead of system call hooking, as `subuidless` does not use ptrace.
 
 ## Status
 
@@ -64,20 +65,25 @@ $ RUN_OCI_SECCOMP_RECEIVER=~/.subuidless.sock unshare -r crun run -b ./test foo
          0       1001          1
 / # touch foo
 / # chown 42:42 foo
+/ # ls -ln foo
+-rw-r--r--    1 42       42               0 Jul 29 12:06 foo
 ```
 
 Make sure that the `chown` command succeeds without `Invalid argument` error, even though no subuid is configured in the `uid_map` file.
+
 The UID ang GID are recorded to [the `user.rootlesscontainers` xattr](https://github.com/rootless-containers/proto) of the target file. 
 
-> *FIXME*:
-> The chowned value are not shown in `ls -l` currently. Will be shown after the implementaion of stat syscalls.
-> Use `getfattr -d -e hex -m user.rootlesscontainers` to inspect the xattr value.
-
 ## Hooked system calls
-To be documented, see `SCMP_ACT_NOTIFY` entries in `./test/config.json`.
+- [X] `chown`
+- [ ] `fchown`
+- [ ] `fchownat`
+- [ ] `lchown`
 
-<!--
-TODO: Syscalls to be captured:
+- [X] `lstat`
+- ...
+
+TODO:
+```
 https://github.com/rootless-containers/PRoot/blob/081bb63955eb4378e53cf4d0eb0ed0d3222bf66e/src/extension/fake_id0/fake_id0.c#L141-L205
 https://github.com/cyphar/remainroot/blob/master/src/ptrace/generic-shims.c
--->
+```

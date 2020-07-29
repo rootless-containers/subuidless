@@ -170,9 +170,7 @@
         {
           "names": [
             "chown",
-            "fchown",
-            "lchown",
-            "fchownat"
+            "lstat"
           ],
           "action": "SCMP_ACT_NOTIFY"
         }
