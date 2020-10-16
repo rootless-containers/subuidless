@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: LGPL-2.1-or-later */
+/* SPDX-License-Identifier: Apache-2.0 */
 #define _GNU_SOURCE
 #include "pb/rootlesscontainers.pb-c.h"
 #include <errno.h>
@@ -18,7 +18,7 @@
 /*
  * recvfd() was copied from
  * https://github.com/rootless-containers/slirp4netns/blob/d5c44a94a271701ddc48c9b20aa6e9539a92ad0a/main.c#L110-L141
- * The author (Akihiro Suda) relicensed the code to LGPL v2.1.
+ * The author (Akihiro Suda) relicensed the code from GPL-2.0-or-later to Apache-2.0.
  */
 static int recvfd(int sock) {
   int fd;
